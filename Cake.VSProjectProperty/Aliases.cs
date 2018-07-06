@@ -22,7 +22,7 @@ namespace Cake.VSProjectProperty
         /// <param name="configure">build configure</param>
         /// <param name="platform">build configure</param>
         [CakeMethodAlias]
-        public static void SetVSProjectProperties(this ICakeContext context, FilePath projectFilePath, IDictionary<string, string> keyValues, string configure = "Release", string  platform = "AnyCPU")
+        public static void SetVSProjectProperties(this ICakeContext context, FilePath projectFilePath, IDictionary<string, string> keyValues, string configure = "Release", string platform = "AnyCPU")
         {
             if (context == null) throw new ArgumentNullException("context");
             if (projectFilePath == null) throw new ArgumentNullException("projectFilePath");
@@ -38,7 +38,7 @@ namespace Cake.VSProjectProperty
 
             configure = configure.ToLower();
             platform = platform.ToLower();
-            
+
             ProjectFileHelper helper = new ProjectFileHelper(file.Path.FullPath);
             foreach (var pair in keyValues)
             {
@@ -46,6 +46,40 @@ namespace Cake.VSProjectProperty
             }
             helper.Save();
         }
+
+
+        /// <summary>
+        /// modify the properties of  .csproj file
+        /// </summary>
+        /// <param name="context">Cake context</param>
+        /// <param name="projectFilePath">path of .csproj file</param>
+        /// <param name="key">properties key values</param>
+        /// <param name="value">properties key values</param>
+        /// <param name="configure">build configure</param>
+        /// <param name="platform">build configure</param>
+        [CakeMethodAlias]
+        public static void SetVSProjectPropertie(this ICakeContext context, FilePath projectFilePath, string key, string value, string configure = "Release", string platform = "AnyCPU")
+        {
+            if (context == null) throw new ArgumentNullException("context");
+            if (projectFilePath == null) throw new ArgumentNullException("projectFilePath");
+            if (projectFilePath.IsRelative) projectFilePath = projectFilePath.MakeAbsolute(context.Environment);
+
+            var file = context.FileSystem.GetFile(projectFilePath);
+            if (!file.Exists)
+            {
+                const string format = "Project file '{0}' does not exist.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, projectFilePath.FullPath);
+                throw new CakeException(message);
+            }
+
+            configure = configure.ToLower();
+            platform = platform.ToLower();
+
+            ProjectFileHelper helper = new ProjectFileHelper(file.Path.FullPath);
+            helper.SetProperty(key, value, configure, platform);
+            helper.Save();
+        }
+
 
 
         /// <summary>
@@ -87,6 +121,40 @@ namespace Cake.VSProjectProperty
                 }
             }
             return keyValues;
+        }
+
+
+        /// <summary>
+        /// get properties from  .csproj file
+        /// </summary>
+        /// <param name="context">Cake context</param>
+        /// <param name="projectFilePath">path of .csproj file</param>
+        /// <param name="key">propertie key</param>
+        /// <param name="configure">build configure</param>
+        /// <param name="platform">build configure</param>
+        /// <returns>value</returns>
+        [CakeMethodAlias]
+        public static string GetVSProjectPropertie(this ICakeContext context, FilePath projectFilePath, string key, string configure = "Release", string platform = "AnyCPU")
+        {
+            if (context == null) throw new ArgumentNullException("context");
+            if (projectFilePath == null) throw new ArgumentNullException("projectFilePath");
+            if (projectFilePath.IsRelative) projectFilePath = projectFilePath.MakeAbsolute(context.Environment);
+
+            var file = context.FileSystem.GetFile(projectFilePath);
+            if (!file.Exists)
+            {
+                const string format = "Project file '{0}' does not exist.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, projectFilePath.FullPath);
+                throw new CakeException(message);
+            }
+
+            Dictionary<string, string> keyValues = new Dictionary<string, string>();
+
+            configure = configure.ToLower();
+            platform = platform.ToLower();
+
+            ProjectFileHelper helper = new ProjectFileHelper(file.Path.FullPath);
+            return helper.GetProperty(key, configure, platform); ;
         }
 
         /// <summary>

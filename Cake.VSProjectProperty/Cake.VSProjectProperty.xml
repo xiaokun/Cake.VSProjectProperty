@@ -19,6 +19,17 @@
             <param name="configure">build configure</param>
             <param name="platform">build configure</param>
         </member>
+        <member name="M:Cake.VSProjectProperty.VSProjectPropertyAliases.SetVSProjectPropertie(Cake.Core.ICakeContext,Cake.Core.IO.FilePath,System.String,System.String,System.String,System.String)">
+            <summary>
+            modify the properties of  .csproj file
+            </summary>
+            <param name="context">Cake context</param>
+            <param name="projectFilePath">path of .csproj file</param>
+            <param name="key">properties key values</param>
+            <param name="value">properties key values</param>
+            <param name="configure">build configure</param>
+            <param name="platform">build configure</param>
+        </member>
         <member name="M:Cake.VSProjectProperty.VSProjectPropertyAliases.GetVSProjectProperties(Cake.Core.ICakeContext,Cake.Core.IO.FilePath,System.Collections.Generic.IEnumerable{System.String},System.String,System.String)">
             <summary>
             get properties from  .csproj file
@@ -29,6 +40,17 @@
             <param name="configure">build configure</param>
             <param name="platform">build configure</param>
             <returns></returns>
+        </member>
+        <member name="M:Cake.VSProjectProperty.VSProjectPropertyAliases.GetVSProjectPropertie(Cake.Core.ICakeContext,Cake.Core.IO.FilePath,System.String,System.String,System.String)">
+            <summary>
+            get properties from  .csproj file
+            </summary>
+            <param name="context">Cake context</param>
+            <param name="projectFilePath">path of .csproj file</param>
+            <param name="key">propertie key</param>
+            <param name="configure">build configure</param>
+            <param name="platform">build configure</param>
+            <returns>value</returns>
         </member>
         <member name="M:Cake.VSProjectProperty.VSProjectPropertyAliases.ValidateString_(Cake.Core.ICakeContext,System.String)">
             <summary>
