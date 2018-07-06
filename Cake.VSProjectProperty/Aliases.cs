@@ -20,8 +20,9 @@ namespace Cake.VSProjectProperty
         /// <param name="projectFilePath">path of .csproj file</param>
         /// <param name="keyValues">properties key values</param>
         /// <param name="configure">build configure</param>
+        /// <param name="platform">build configure</param>
         [CakeMethodAlias]
-        public static void SetVSProjectProperties(this ICakeContext context, FilePath projectFilePath, IDictionary<string, string> keyValues, string configure = "Release")
+        public static void SetVSProjectProperties(this ICakeContext context, FilePath projectFilePath, IDictionary<string, string> keyValues, string configure = "Release", string  platform = "AnyCPU")
         {
             if (context == null) throw new ArgumentNullException("context");
             if (projectFilePath == null) throw new ArgumentNullException("projectFilePath");
@@ -35,10 +36,13 @@ namespace Cake.VSProjectProperty
                 throw new CakeException(message);
             }
 
-            VSProjectPropertyHelper helper = new VSProjectPropertyHelper(file.Path.FullPath, configure);
+            configure = configure.ToLower();
+            platform = platform.ToLower();
+            
+            ProjectFileHelper helper = new ProjectFileHelper(file.Path.FullPath);
             foreach (var pair in keyValues)
             {
-                helper.SetProperty(pair.Key, pair.Value);
+                helper.SetProperty(pair.Key, pair.Value, configure, platform);
             }
             helper.Save();
         }
@@ -51,9 +55,10 @@ namespace Cake.VSProjectProperty
         /// <param name="projectFilePath">path of .csproj file</param>
         /// <param name="keys">properties keys</param>
         /// <param name="configure">build configure</param>
+        /// <param name="platform">build configure</param>
         /// <returns></returns>
         [CakeMethodAlias]
-        public static IDictionary<string, string> GetVSProjectProperties(this ICakeContext context, FilePath projectFilePath, IEnumerable<string> keys, string configure = "Release")
+        public static IDictionary<string, string> GetVSProjectProperties(this ICakeContext context, FilePath projectFilePath, IEnumerable<string> keys, string configure = "Release", string platform = "AnyCPU")
         {
             if (context == null) throw new ArgumentNullException("context");
             if (projectFilePath == null) throw new ArgumentNullException("projectFilePath");
@@ -69,10 +74,13 @@ namespace Cake.VSProjectProperty
 
             Dictionary<string, string> keyValues = new Dictionary<string, string>();
 
-            VSProjectPropertyHelper helper = new VSProjectPropertyHelper(file.Path.FullPath, configure);
+            configure = configure.ToLower();
+            platform = platform.ToLower();
+
+            ProjectFileHelper helper = new ProjectFileHelper(file.Path.FullPath);
             foreach (var key in keys)
             {
-                string value = helper.GetProperty(key);
+                string value = helper.GetProperty(key, configure, platform);
                 if (!string.IsNullOrEmpty(value))
                 {
                     keyValues.Add(key, value);

@@ -7,110 +7,135 @@ namespace Cake.VSProjectProperty.Test
     public class VSProjectPropertyHelperTest
     {
         [TestMethod]
-        public void TestGlobal()
+        public void TestCsprojGlobal()
         {
-            VSProjectPropertyHelper helper = new VSProjectPropertyHelper("test.csproj", "Debug");
+            ProjectFileHelper helper = new ProjectFileHelper("test.csproj");
+
+            string config = "debug";
 
             //read tests 
-            string AssemblyName = helper.GetProperty("AssemblyName");
+            string AssemblyName = helper.GetProperty("AssemblyName", config);
             Assert.AreEqual(AssemblyName, "AppExeName");
 
-            string RootNamespace = helper.GetProperty("RootNamespace");
+            string RootNamespace = helper.GetProperty("RootNamespace", config);
             Assert.AreEqual(RootNamespace, "Com.App.Desktop");
 
-            string PublishUrl = helper.GetProperty("PublishUrl");
+            string PublishUrl = helper.GetProperty("PublishUrl", config);
             Assert.AreEqual(PublishUrl, "publish\\");
 
             //set tests
-            helper.SetProperty("AssemblyName", "test assmbly name");
-            helper.SetProperty("RootNamespace", "test root namespace");
-            helper.SetProperty("PublishUrl", "test publish urls");
+            helper.SetProperty("AssemblyName", "test assmbly name", config);
+            helper.SetProperty("RootNamespace", "test root namespace", config);
+            helper.SetProperty("PublishUrl", "test publish urls", config);
 
             helper.Save();
             helper.Reload();
 
-            AssemblyName = helper.GetProperty("AssemblyName");
+            AssemblyName = helper.GetProperty("AssemblyName", config);
             Assert.AreEqual(AssemblyName, "test assmbly name");
 
-            RootNamespace = helper.GetProperty("RootNamespace");
+            RootNamespace = helper.GetProperty("RootNamespace", config);
             Assert.AreEqual(RootNamespace, "test root namespace");
 
-            PublishUrl = helper.GetProperty("PublishUrl");
+            PublishUrl = helper.GetProperty("PublishUrl", config);
             Assert.AreEqual(PublishUrl, "test publish urls");
 
             //reset to default value 
-            helper.SetProperty("AssemblyName", "AppExeName");
-            helper.SetProperty("RootNamespace", "Com.App.Desktop");
-            helper.SetProperty("PublishUrl", "publish\\");
+            helper.SetProperty("AssemblyName", "AppExeName", config);
+            helper.SetProperty("RootNamespace", "Com.App.Desktop", config);
+            helper.SetProperty("PublishUrl", "publish\\", config);
             helper.Save();
         }
 
         [TestMethod]
-        public void TestDebug()
+        public void TestCsprojDebug()
         {
-            VSProjectPropertyHelper helper = new VSProjectPropertyHelper("test.csproj", "Debug");
+            ProjectFileHelper helper = new ProjectFileHelper("test.csproj");
 
+            string config = "debug";
             //read tests 
 
-            string DefineConstants = helper.GetProperty("DefineConstants");
+            string DefineConstants = helper.GetProperty("DefineConstants", config);
             Assert.AreEqual(DefineConstants, "DEBUG;TRACE");
 
-            string WarningLevel = helper.GetProperty("WarningLevel");
+            string WarningLevel = helper.GetProperty("WarningLevel", config);
             Assert.AreEqual(WarningLevel, "7");
 
             //set tests
-            helper.SetProperty("DefineConstants", "Test Debug Defines");
-            helper.SetProperty("WarningLevel", "8");
+            helper.SetProperty("DefineConstants", "Test Debug Defines", config);
+            helper.SetProperty("WarningLevel", "8", config);
 
             helper.Save();
             helper.Reload();
 
-            DefineConstants = helper.GetProperty("DefineConstants");
+            DefineConstants = helper.GetProperty("DefineConstants", config);
             Assert.AreEqual(DefineConstants, "Test Debug Defines");
 
-            WarningLevel = helper.GetProperty("WarningLevel");
+            WarningLevel = helper.GetProperty("WarningLevel", config);
             Assert.AreEqual(WarningLevel, "8");
 
             //reset to default value 
-            helper.SetProperty("DefineConstants", "DEBUG;TRACE");
-            helper.SetProperty("WarningLevel", "7");
+            helper.SetProperty("DefineConstants", "DEBUG;TRACE", config);
+            helper.SetProperty("WarningLevel", "7", config);
             helper.Save();
         }
 
         [TestMethod]
         public void TestRelease()
         {
-            VSProjectPropertyHelper helper = new VSProjectPropertyHelper("test.csproj", "Debug");
+            ProjectFileHelper helper = new ProjectFileHelper("test.csproj");
 
+            string config = "release";
             //read tests 
 
-            string DefineConstants = helper.GetProperty("DefineConstants","Release");
+            string DefineConstants = helper.GetProperty("DefineConstants",config);
             Assert.AreEqual(DefineConstants, "TRACE");
 
-            string WarningLevel = helper.GetProperty("WarningLevel", "Release");
+            string WarningLevel = helper.GetProperty("WarningLevel", config);
             Assert.AreEqual(WarningLevel, "4");
 
             //set tests
-            helper.SetProperty("DefineConstants", "Test Release Defines", "Release");
-            helper.SetProperty("WarningLevel", "5", "Release");
+            helper.SetProperty("DefineConstants", "Test Release Defines", config);
+            helper.SetProperty("WarningLevel", "5", config);
 
             helper.Save();
             helper.Reload();
 
-            DefineConstants = helper.GetProperty("DefineConstants", "Release");
+            DefineConstants = helper.GetProperty("DefineConstants", config);
             Assert.AreEqual(DefineConstants, "Test Release Defines");
 
-            WarningLevel = helper.GetProperty("WarningLevel", "Release");
+            WarningLevel = helper.GetProperty("WarningLevel", config);
             Assert.AreEqual(WarningLevel, "5");
 
             //reset to default value 
-            helper.SetProperty("DefineConstants", "TRACE", "Release");
-            helper.SetProperty("WarningLevel", "4", "Release");
+            helper.SetProperty("DefineConstants", "TRACE", config);
+            helper.SetProperty("WarningLevel", "4", config);
             helper.Save();
         }
 
 
+        [TestMethod]
+        public void TestVcxprojReleaseX64()
+        {
+            ProjectFileHelper helper = new ProjectFileHelper("cpulspuls.vcxproj");
 
+            string config = "release";
+            string platform = "x64";
 
+            //read tests 
+            string def = helper.GetProperty("PreprocessorDefinitions", config, platform);
+
+            string newdef = "DX_11_M;" + def;
+
+            //set tests
+            helper.SetProperty("PreprocessorDefinitions", newdef, config, platform);
+
+            helper.Save();
+
+            helper.Reload();
+
+            string rdef = helper.GetProperty("PreprocessorDefinitions", config, platform);
+            Assert.AreEqual(rdef, newdef);
+        }
     }
 }
