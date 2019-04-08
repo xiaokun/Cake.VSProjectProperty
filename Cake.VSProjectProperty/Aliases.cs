@@ -1,9 +1,9 @@
-using Cake.Core;
-using Cake.Core.Annotations;
-using Cake.Core.IO;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Cake.Core;
+using Cake.Core.Annotations;
+using Cake.Core.IO;
 
 namespace Cake.VSProjectProperty
 {
@@ -160,7 +160,8 @@ namespace Cake.VSProjectProperty
         /// <summary>
         /// a helper method for myself. it will throw an exception if the input string is null or empty.
         /// </summary>
-        /// <param name="str">the input string</param>
+        /// <param name="context"></param>
+        /// <param name="str"></param>
         /// <returns></returns>
         [CakeMethodAlias]
         public static string ValidateString_(this ICakeContext context, string str)

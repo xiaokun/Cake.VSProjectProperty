@@ -1,7 +1,5 @@
-﻿using Cake.Core;
-using System.Xml;
-using System.Xml.Linq;
-using System.Linq;
+﻿using System.Xml;
+using Cake.Core;
 
 namespace Cake.VSProjectProperty
 {
@@ -17,7 +15,6 @@ namespace Cake.VSProjectProperty
         /// constructor
         /// </summary>
         /// <param name="projectFilePath"></param>
-        /// <param name="configure"></param>
         public ProjectFileHelper(string projectFilePath)
         {
             if (!System.IO.File.Exists(projectFilePath)) throw new CakeException("Project file not exist.");
@@ -31,10 +28,6 @@ namespace Cake.VSProjectProperty
         {
             if (group.Attributes.Count == 0)
             {
-                if (group.ChildNodes[0].Name != "Configuration") return false;
-                if (!group.ChildNodes[0].InnerText.ToLower().Contains(config)) return false;
-                if (group.ChildNodes[1].Name != "Platform") return false;
-                if (!group.ChildNodes[1].InnerText.ToLower().Contains(platform)) return false;
                 return true;
             }
 
@@ -60,7 +53,6 @@ namespace Cake.VSProjectProperty
         {
             XmlNode root = _doc.DocumentElement;
             if (root == null || root.Name != "Project") throw new CakeException("not a valid Project file.");
-          
 
             foreach (XmlNode group in root.ChildNodes)
             {
@@ -76,10 +68,10 @@ namespace Cake.VSProjectProperty
                         return;
                     }
 
-                    foreach (XmlNode item2 in item.ChildNodes)
+                    foreach (XmlNode child in item.ChildNodes)
                     {
-                        if (item2.Name != key) continue;
-                        item2.InnerText = value;
+                        if (child.Name != key) continue;
+                        child.InnerText = value;
                         return;
                     }
                  }
@@ -114,10 +106,10 @@ namespace Cake.VSProjectProperty
                         return item.InnerText;
                     }
 
-                    foreach (XmlNode item2 in item.ChildNodes)
+                    foreach (XmlNode child in item.ChildNodes)
                     {
-                        if (item2.Name != key) continue;
-                        return item2.InnerText;
+                        if (child.Name != key) continue;
+                        return child.InnerText;
                     }
                 }
             }

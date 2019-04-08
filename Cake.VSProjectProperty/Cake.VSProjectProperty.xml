@@ -56,7 +56,8 @@
             <summary>
             a helper method for myself. it will throw an exception if the input string is null or empty.
             </summary>
-            <param name="str">the input string</param>
+            <param name="context"></param>
+            <param name="str"></param>
             <returns></returns>
         </member>
         <member name="T:Cake.VSProjectProperty.ProjectFileHelper">
@@ -69,7 +70,6 @@
             constructor
             </summary>
             <param name="projectFilePath"></param>
-            <param name="configure"></param>
         </member>
         <member name="M:Cake.VSProjectProperty.ProjectFileHelper.SetProperty(System.String,System.String,System.String,System.String)">
             <summary>
