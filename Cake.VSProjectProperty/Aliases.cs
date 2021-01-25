@@ -22,6 +22,7 @@ namespace Cake.VSProjectProperty
         /// <param name="configure">build configure</param>
         /// <param name="platform">build configure</param>
         [CakeMethodAlias]
+        [CakeNamespaceImport("Cake.VSProjectProperty")]
         public static void SetVSProjectProperties(this ICakeContext context, FilePath projectFilePath, IDictionary<string, string> keyValues, string configure = "Release", string platform = "AnyCPU")
         {
             if (context == null) throw new ArgumentNullException("context");
@@ -58,6 +59,7 @@ namespace Cake.VSProjectProperty
         /// <param name="configure">build configure</param>
         /// <param name="platform">build configure</param>
         [CakeMethodAlias]
+        [CakeNamespaceImport("Cake.VSProjectProperty")]
         public static void SetVSProjectPropertie(this ICakeContext context, FilePath projectFilePath, string key, string value, string configure = "Release", string platform = "AnyCPU")
         {
             if (context == null) throw new ArgumentNullException("context");
@@ -92,6 +94,7 @@ namespace Cake.VSProjectProperty
         /// <param name="platform">build configure</param>
         /// <returns></returns>
         [CakeMethodAlias]
+        [CakeNamespaceImport("Cake.VSProjectProperty")]
         public static IDictionary<string, string> GetVSProjectProperties(this ICakeContext context, FilePath projectFilePath, IEnumerable<string> keys, string configure = "Release", string platform = "AnyCPU")
         {
             if (context == null) throw new ArgumentNullException("context");
@@ -134,6 +137,7 @@ namespace Cake.VSProjectProperty
         /// <param name="platform">build configure</param>
         /// <returns>value</returns>
         [CakeMethodAlias]
+        [CakeNamespaceImport("Cake.VSProjectProperty")]
         public static string GetVSProjectPropertie(this ICakeContext context, FilePath projectFilePath, string key, string configure = "Release", string platform = "AnyCPU")
         {
             if (context == null) throw new ArgumentNullException("context");
@@ -164,6 +168,7 @@ namespace Cake.VSProjectProperty
         /// <param name="str"></param>
         /// <returns></returns>
         [CakeMethodAlias]
+        [CakeNamespaceImport("Cake.VSProjectProperty")]
         public static string ValidateString_(this ICakeContext context, string str)
         {
             if (string.IsNullOrWhiteSpace(str)) throw new CakeException("string is null or empty.");
