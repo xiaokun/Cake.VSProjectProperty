@@ -45,11 +45,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="cpulspuls.vcxproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="test.csproj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -19,11 +19,9 @@ namespace Cake.VSProjectProperty
         /// <param name="context">Cake context</param>
         /// <param name="projectFilePath">path of .csproj file</param>
         /// <param name="keyValues">properties key values</param>
-        /// <param name="configure">build configure</param>
-        /// <param name="platform">build configure</param>
         [CakeMethodAlias]
         [CakeNamespaceImport("Cake.VSProjectProperty")]
-        public static void SetVSProjectProperties(this ICakeContext context, FilePath projectFilePath, IDictionary<string, string> keyValues, string configure = "Release", string platform = "AnyCPU")
+        public static void SetVSProjectProperties(this ICakeContext context, FilePath projectFilePath, IDictionary<string, string> keyValues)
         {
             if (context == null) throw new ArgumentNullException("context");
             if (projectFilePath == null) throw new ArgumentNullException("projectFilePath");
@@ -36,14 +34,11 @@ namespace Cake.VSProjectProperty
                 var message = string.Format(CultureInfo.InvariantCulture, format, projectFilePath.FullPath);
                 throw new CakeException(message);
             }
-
-            configure = configure.ToLower();
-            platform = platform.ToLower();
-
+         
             ProjectFileHelper helper = new ProjectFileHelper(file.Path.FullPath);
             foreach (var pair in keyValues)
             {
-                helper.SetProperty(pair.Key, pair.Value, configure, platform);
+                helper.SetProperty(pair.Key, pair.Value);
             }
             helper.Save();
         }
@@ -60,7 +55,7 @@ namespace Cake.VSProjectProperty
         /// <param name="platform">build configure</param>
         [CakeMethodAlias]
         [CakeNamespaceImport("Cake.VSProjectProperty")]
-        public static void SetVSProjectPropertie(this ICakeContext context, FilePath projectFilePath, string key, string value, string configure = "Release", string platform = "AnyCPU")
+        public static void SetVSProjectPropertie(this ICakeContext context, FilePath projectFilePath, string key, string value)
         {
             if (context == null) throw new ArgumentNullException("context");
             if (projectFilePath == null) throw new ArgumentNullException("projectFilePath");
@@ -74,11 +69,8 @@ namespace Cake.VSProjectProperty
                 throw new CakeException(message);
             }
 
-            configure = configure.ToLower();
-            platform = platform.ToLower();
-
             ProjectFileHelper helper = new ProjectFileHelper(file.Path.FullPath);
-            helper.SetProperty(key, value, configure, platform);
+            helper.SetProperty(key, value);
             helper.Save();
         }
 
@@ -95,7 +87,7 @@ namespace Cake.VSProjectProperty
         /// <returns></returns>
         [CakeMethodAlias]
         [CakeNamespaceImport("Cake.VSProjectProperty")]
-        public static IDictionary<string, string> GetVSProjectProperties(this ICakeContext context, FilePath projectFilePath, IEnumerable<string> keys, string configure = "Release", string platform = "AnyCPU")
+        public static IDictionary<string, string> GetVSProjectProperties(this ICakeContext context, FilePath projectFilePath, IEnumerable<string> keys)
         {
             if (context == null) throw new ArgumentNullException("context");
             if (projectFilePath == null) throw new ArgumentNullException("projectFilePath");
@@ -111,16 +103,17 @@ namespace Cake.VSProjectProperty
 
             Dictionary<string, string> keyValues = new Dictionary<string, string>();
 
-            configure = configure.ToLower();
-            platform = platform.ToLower();
-
             ProjectFileHelper helper = new ProjectFileHelper(file.Path.FullPath);
             foreach (var key in keys)
             {
-                string value = helper.GetProperty(key, configure, platform);
-                if (!string.IsNullOrEmpty(value))
+                string value = helper.GetProperty(key);
+                if (!string.IsNullOrWhiteSpace(value))
                 {
-                    keyValues.Add(key, value);
+                    if(keyValues.ContainsKey(key))
+					{
+                        keyValues[key] = value;
+                    }
+                    else keyValues.Add(key, value);
                 }
             }
             return keyValues;
@@ -138,7 +131,7 @@ namespace Cake.VSProjectProperty
         /// <returns>value</returns>
         [CakeMethodAlias]
         [CakeNamespaceImport("Cake.VSProjectProperty")]
-        public static string GetVSProjectPropertie(this ICakeContext context, FilePath projectFilePath, string key, string configure = "Release", string platform = "AnyCPU")
+        public static string GetVSProjectPropertie(this ICakeContext context, FilePath projectFilePath, string key)
         {
             if (context == null) throw new ArgumentNullException("context");
             if (projectFilePath == null) throw new ArgumentNullException("projectFilePath");
@@ -152,13 +145,8 @@ namespace Cake.VSProjectProperty
                 throw new CakeException(message);
             }
 
-            Dictionary<string, string> keyValues = new Dictionary<string, string>();
-
-            configure = configure.ToLower();
-            platform = platform.ToLower();
-
             ProjectFileHelper helper = new ProjectFileHelper(file.Path.FullPath);
-            return helper.GetProperty(key, configure, platform); ;
+            return helper.GetProperty(key); ;
         }
 
         /// <summary>
